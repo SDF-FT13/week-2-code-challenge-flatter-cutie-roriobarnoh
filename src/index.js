@@ -5,7 +5,7 @@ const resetBtn = document.querySelector('#reset-btn');
 console.log(resetBtn);
 async function displayCharactres(params) {
   try {
-    const response = await fetch("http://localhost:3005/characters");
+    const response = await fetch("http://localhost:3002/characters");
     if (!response.ok) {
       throw new error("Failed to fetch data!");
     }
@@ -32,7 +32,7 @@ async function displayCharactres(params) {
 displayCharactres();
 
 function detailedCharacter(character) {
-  fetch("http://localhost:3005/characters")
+  fetch("http://localhost:3002/characters")
     .then((reponse) => reponse.json())
     .then((characters) => {
       characters.forEach((character) => displayDetailedCharacter(character));
@@ -73,7 +73,7 @@ form.addEventListener("submit", (e) => {
     console.log(votesAdded);
     if(!isNaN(votesAdded)){
       currentCharacter.votes+=votesAdded;
-      fetch(`http://localhost:3005/characters/${currentCharacter.id}`,{
+      fetch(`http://localhost:3002/characters/${currentCharacter.id}`,{
         method:"PATCH",
         headers:{
           "Content-Type":"application/json"
@@ -96,4 +96,17 @@ form.addEventListener("submit", (e) => {
   form.reset();
 
 });
- 
+resetBtn.addEventListener('click', ()=>{
+  console.log(currentCharacter.votes)
+  currentCharacter.votes = 0;
+  votesInput.textContent = currentCharacter.votes;
+  fetch(`http://localhost:3002/characters/${currentCharacter.id}`,{
+    method:"PATCH",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body:JSON.stringify({
+      votes:0
+    })
+})
+})
