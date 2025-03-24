@@ -1,5 +1,8 @@
 // Your code here
 const characterBar = document.querySelector("#character-bar");
+let currentCharacter = null;
+const resetBtn = document.querySelector('#reset-btn');
+console.log(resetBtn);
 async function displayCharactres(params) {
   try {
     const response = await fetch("http://localhost:3005/characters");
@@ -41,7 +44,8 @@ const detailedInfo = document.querySelector("#detailed-info");
 
 const votesInput = document.querySelector("#vote-count");
 function displayDetailedCharacter(character) {
-  console.log(detailedInfo);
+  // console.log(detailedInfo);
+  currentCharacter= character;
 
   const myName = document.querySelector("#name");
   const img = document.querySelector("#image");
@@ -50,8 +54,8 @@ function displayDetailedCharacter(character) {
   img.src = character.image;
   votesInput.textContent = character.votes;
 
-  console.log(character.name);
-  console.log(character.image);
+  // console.log(character.name);
+  // console.log(character.image);
 
  
 }
@@ -59,22 +63,37 @@ function displayDetailedCharacter(character) {
 const form = document.querySelector("#votes-form");
 const inputValue = document.querySelector("#votes");
 
-console.log(form);
 form.addEventListener("submit", (e) => {
   e.preventDefault();
-
-  const myVotes = parseInt(inputValue.value, 10);
-
-  if(isNaN(myVotes) || myVotes <=0){
-    alert('please enter a valid number greater than zero');
-    return;
+  const votesAdded = parseInt(inputValue.value, 10)
+  console.log(votesAdded);
+  
+  if(currentCharacter){
+    const votesAdded = parseInt(inputValue.value, 10)
+    console.log(votesAdded);
+    if(!isNaN(votesAdded)){
+      currentCharacter.votes+=votesAdded;
+      fetch(`http://localhost:3005/characters/${currentCharacter.id}`,{
+        method:"PATCH",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+          votes:currentCharacter.votes
+        })
+      }).then(response=>{
+        return response.json()
+      }).then(updatedCharacter =>{
+        const votesCount = document.querySelector('#vote-count');
+        votesCount.textContent = updatedCharacter.votes;
+      }).catch(error =>{
+        console.error("Error updating vtes", error)
+      });
+      const votesCount = document.querySelector('#vote-count'); 
+      votesCount.textContent= currentCharacter.votes;
+    }
   }
-  const currentVote = parseInt((votesInput).textContent, 10);
+  form.reset();
 
-  const updatedVotes = currentVote + myVotes;
-
-  votesInput.textContent = updatedVotes;
-
-  inputValue.value = '';
- 
 });
+ 
