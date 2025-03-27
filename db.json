@@ -22,13 +22,19 @@
       "id": "4",
       "name": "Dr. Lion",
       "image": "http://bestanimations.com/Animals/Mammals/Cats/Lions/animated-lion-gif-11.gif",
-      "votes": 10
+      "votes": 18
     },
     {
       "id": "5",
       "name": "Mme. Panda",
       "image": "https://media.giphy.com/media/ALalVMOVR8Qw/giphy.gif",
       "votes": 0
+    },
+    {
+      "id": "7e7c",
+      "newName": "Mr. Dog",
+      "newImage": "https://media.giphy.com/media/ALalVMOVR8Qw/giphy.gif",
+      "votes": 4
     }
   ]
 }
